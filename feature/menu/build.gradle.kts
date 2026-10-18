@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -23,14 +24,28 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
 
+    // Compose BOM (gives the version to all Compose libraries without a version)
+    implementation(platform(libs.androidx.compose.bom))
+
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.material)
 
     //Hilt
     implementation(libs.hilt.android)
+    debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.hilt.compiler)
+
+    //Icons
+    implementation(libs.androidx.compose.material.icons.core)
+
+    debugImplementation(libs.androidx.ui.tooling)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
