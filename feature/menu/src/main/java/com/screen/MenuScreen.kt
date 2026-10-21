@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -47,21 +46,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.menu.R
+import com.model.Option
+import com.model.OptionGroup
+import com.model.Pricing
+import com.model.SelectionType
+import com.model.basePriceCents
 
 
 data class Dish(
     val id: Int,
     val name: String,
     val description: String,
-    val price: Double,
-    @DrawableRes val image: Int
+    val pricing: Pricing,
+    @DrawableRes val image: Int,
+    val optionGroups: List<OptionGroup> = emptyList(),
 )
 
 @Composable
 fun DishCard(
     dish: Dish,
     onAddClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -91,8 +96,9 @@ fun DishCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
-                    "%.2f €".format(dish.price),
+                    "%.2f €".format(dish.pricing.basePriceCents() / 100.0),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -140,7 +146,7 @@ fun MenuScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(dishes, key = { it.id }) { dish ->
-                DishCard(dish = dish, onAddClick = { onAddClick(dish) })
+                DishCard(dish = dish,onAddClick = { onAddClick(dish) })
             }
         }
     }
@@ -204,39 +210,75 @@ fun MenuScreenPreview() {
     var query by remember { mutableStateOf("") }
     val allDishes = listOf(
         Dish(
-            1,
-            "Khinkali",
-            "Georgian dumplings with beef and pork",
-            25.0,
-            R.drawable.khinkali
+            id = 1,
+            name = "Khinkali",
+            description = "Georgian dumplings with beef and pork",
+            pricing = Pricing.PerUnit(unitPriceCents = 250, minQuantity = 5, maxQuantity = 10),
+            image = R.drawable.khinkali
         ),
         Dish(
-            2,
-            "Adjarian khachapuri",
-            "Cheese bread with egg",
-            16.00,
-            R.drawable.adjarulikhachapuri
+            id = 2,
+            name = "Adjarian khachapuri",
+            description = "Cheese bread with egg",
+            pricing = Pricing.Fixed(1600),
+            image = R.drawable.adjarulikhachapuri
         ),
-        Dish(3, "Lobiani", "Bread filled with beans", 9.0, R.drawable.lobiani),
-        Dish(4, "Wrap", "Our best-seller", 12.45, R.drawable.wrap),
         Dish(
-            5,
-            "Imeruli khachapuri",
-            "Our best-seller",
-            12.0,
-            R.drawable.imerulikhachapuri
+            id = 3,
+            name = "Lobiani",
+            description = "Bread filled with beans",
+            pricing = Pricing.Fixed(900),
+            image = R.drawable.lobiani
         ),
-        Dish(6, "Badrijani", "Our best-seller", 12.0, R.drawable.badrijani),
-        Dish(7, "Ensalada", "Our best-seller", 9.0, R.drawable.ensaladageorgian),
+        Dish(
+            id = 4,
+            name = "Wrap",
+            description = "Our best-seller",
+            pricing = Pricing.Fixed(1245),
+            image = R.drawable.wrap,
+            optionGroups = listOf(
+                OptionGroup(
+                    id = "spice",
+                    title = "Spiciness",
+                    type = SelectionType.SINGLE,
+                    options = listOf(
+                        Option("mild", "Not spicy"),
+                        Option("hot", "Spicy")
+                    ),
+                    required = true
+                )
+            )
+        ),
+        Dish(
+            id = 5,
+            name = "Imeruli khachapuri",
+            description = "Our best-seller",
+            pricing = Pricing.Fixed(1200),
+            image = R.drawable.imerulikhachapuri
+        ),
+        Dish(
+            id = 6,
+            name = "Badrijani",
+            description = "Our best-seller",
+            pricing = Pricing.Fixed(1200),
+            image = R.drawable.badrijani
+        ),
+        Dish(
+            id = 7,
+            name = "Ensalada",
+            description = "Our best-seller",
+            pricing = Pricing.Fixed(900),
+            image = R.drawable.ensaladageorgian
+        ),
     )
 
     MaterialTheme {
         MenuScreen(
             categories = listOf(
-                "Adjaruli Khachapuri", "Khinkali", "Wrap",
-                "Imeruli Khachapuri", "Badrijani", "Ensalada", "Lobiani"
+                "Hot Dishes", "Drinks", "Salads",
+                "Desserts"
             ),
-            selectedCategory = "Adjaruli Khachapuri",
+            selectedCategory = "Hot Dishes",
             dishes = allDishes.filter { it.name.contains(query, ignoreCase = true) },
             query = query,
             onQueryChange = { query = it },

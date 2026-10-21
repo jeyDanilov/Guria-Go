@@ -23,6 +23,7 @@ runtime = "1.12.1"
 uiToolingPreview = "1.12.1"
 uiTooling = "1.12.1"
 material3 = "1.4.0"
+firebaseCrashlyticsBuildtools = "3.0.8"
 
 
 [libraries]
@@ -67,6 +68,7 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", vers
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 
 [plugins]
