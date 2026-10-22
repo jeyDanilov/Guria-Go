@@ -45,11 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.menu.R
-import com.model.Option
 import com.model.OptionGroup
 import com.model.Pricing
-import com.model.SelectionType
 import com.model.basePriceCents
 
 
@@ -59,6 +56,7 @@ data class Dish(
     val description: String,
     val pricing: Pricing,
     @DrawableRes val image: Int,
+    val categories: List<String>,
     val optionGroups: List<OptionGroup> = emptyList(),
 )
 
@@ -69,8 +67,7 @@ fun DishCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)
     ) {
 
         Image(
@@ -133,8 +130,7 @@ fun MenuScreen(
                 FilterChip(
                     selected = category == selectedCategory,
                     onClick = { onCategorySelected(category) },
-                    label = { Text(category) }
-                )
+                    label = { Text(category) })
             }
         }
 
@@ -146,7 +142,7 @@ fun MenuScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(dishes, key = { it.id }) { dish ->
-                DishCard(dish = dish,onAddClick = { onAddClick(dish) })
+                DishCard(dish = dish, onAddClick = { onAddClick(dish) })
             }
         }
     }
@@ -154,9 +150,7 @@ fun MenuScreen(
 
 @Composable
 fun MenuHeader(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -208,82 +202,24 @@ fun MenuHeader(
 @Composable
 fun MenuScreenPreview() {
     var query by remember { mutableStateOf("") }
-    val allDishes = listOf(
-        Dish(
-            id = 1,
-            name = "Khinkali",
-            description = "Georgian dumplings with beef and pork",
-            pricing = Pricing.PerUnit(unitPriceCents = 250, minQuantity = 5, maxQuantity = 10),
-            image = R.drawable.khinkali
-        ),
-        Dish(
-            id = 2,
-            name = "Adjarian khachapuri",
-            description = "Cheese bread with egg",
-            pricing = Pricing.Fixed(1600),
-            image = R.drawable.adjarulikhachapuri
-        ),
-        Dish(
-            id = 3,
-            name = "Lobiani",
-            description = "Bread filled with beans",
-            pricing = Pricing.Fixed(900),
-            image = R.drawable.lobiani
-        ),
-        Dish(
-            id = 4,
-            name = "Wrap",
-            description = "Our best-seller",
-            pricing = Pricing.Fixed(1245),
-            image = R.drawable.wrap,
-            optionGroups = listOf(
-                OptionGroup(
-                    id = "spice",
-                    title = "Spiciness",
-                    type = SelectionType.SINGLE,
-                    options = listOf(
-                        Option("mild", "Not spicy"),
-                        Option("hot", "Spicy")
-                    ),
-                    required = true
-                )
-            )
-        ),
-        Dish(
-            id = 5,
-            name = "Imeruli khachapuri",
-            description = "Our best-seller",
-            pricing = Pricing.Fixed(1200),
-            image = R.drawable.imerulikhachapuri
-        ),
-        Dish(
-            id = 6,
-            name = "Badrijani",
-            description = "Our best-seller",
-            pricing = Pricing.Fixed(1200),
-            image = R.drawable.badrijani
-        ),
-        Dish(
-            id = 7,
-            name = "Ensalada",
-            description = "Our best-seller",
-            pricing = Pricing.Fixed(900),
-            image = R.drawable.ensaladageorgian
-        ),
-    )
+    var selectedCategory by remember { mutableStateOf(FakeDishes.category.first()) }
+
+    val dishes = if (query.isBlank()) {
+        FakeDishes.all.filter {selectedCategory in it.categories }
+    } else {
+        FakeDishes.all.filter { it.name.contains(query, ignoreCase = true) }
+    }
 
     MaterialTheme {
         MenuScreen(
             categories = listOf(
-                "Hot Dishes", "Drinks", "Salads",
-                "Desserts"
+                "Hot Dishes", "Cold Dishes", "Salads", "Desserts"
             ),
             selectedCategory = "Hot Dishes",
-            dishes = allDishes.filter { it.name.contains(query, ignoreCase = true) },
+            dishes = dishes,
             query = query,
             onQueryChange = { query = it },
-            onCategorySelected = {},
-            onAddClick = {}
-        )
+            onCategorySelected = { selectedCategory = it },
+            onAddClick = {})
     }
 }
