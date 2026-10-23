@@ -205,7 +205,7 @@ fun MenuScreenPreview() {
     var selectedCategory by remember { mutableStateOf(FakeDishes.category.first()) }
 
     val dishes = if (query.isBlank()) {
-        FakeDishes.all.filter {selectedCategory in it.categories }
+        FakeDishes.all.filter { selectedCategory in it.categories }
     } else {
         FakeDishes.all.filter { it.name.contains(query, ignoreCase = true) }
     }

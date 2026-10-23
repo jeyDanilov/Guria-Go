@@ -42,6 +42,16 @@ object FakeDishes {
             categories = listOf("Hot Dishes"),
             optionGroups = listOf(
                 OptionGroup(
+                    id = "meat",
+                    title = "Meat",
+                    type = SelectionType.SINGLE,
+                    options = listOf(
+                        Option("chicken", "Chicken"),
+                        Option("pork", "Pork")
+                    ),
+                    required = true
+                ),
+                OptionGroup(
                     id = "spice",
                     title = "Spiciness",
                     type = SelectionType.SINGLE,

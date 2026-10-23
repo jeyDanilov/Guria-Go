@@ -3,10 +3,13 @@ package com.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -29,23 +33,45 @@ fun QuantityStepper(
     onQuantityChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val buttonColors = IconButtonDefaults.filledIconButtonColors(
+        containerColor = Color.White.copy(alpha = 0.6f),
+        contentColor = Ink,
+        disabledContainerColor = Color.White.copy(alpha = 0.25f),
+        disabledContentColor = Ink.copy(alpha = 0.4f)
+    )
+
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(30.dp))
-            .background(Color(0xFFD9A441))
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .background(Amber)
+            .padding(horizontal = 8.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = {onQuantityChange(quantity -1)}, enabled = quantity > min) {
-            Text("-")
+        FilledIconButton(
+            onClick = { onQuantityChange(quantity - 1) },
+            enabled = quantity > min,
+            colors = buttonColors,
+            modifier = Modifier.size(36.dp)
+        ) {
+            Text("-", style = MaterialTheme.typography.titleMedium)
         }
-        Text("$quantity",
+        Text(
+            "$quantity",
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = 8.dp))
+            fontWeight = FontWeight.Bold,
+            color = Ink,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
 
-        IconButton(onClick =  { onQuantityChange(quantity + 1) }, enabled = quantity < max) {
-            Text("+")
+        FilledIconButton(
+            onClick = { onQuantityChange(quantity + 1) },
+            enabled = quantity < max,
+            colors = buttonColors,
+            modifier = Modifier.size(36.dp)
+        ) {
+            Text("+", style = MaterialTheme.typography.titleMedium)
         }
+       
     }
 }
 

@@ -1,24 +1,31 @@
 package com.screen
 
+import android.R.attr.onClick
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,15 +41,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.model.CartItem
 import com.model.Option
 import com.model.OptionGroup
 import com.pricing.calculateTotalCents
 import com.pricing.toggle
+import java.util.UUID
 
-
-private val Wine = Color(0xFF8B1E2D)
 
 @Composable
 fun DishDetailScreen(
@@ -51,7 +59,7 @@ fun DishDetailScreen(
     selectedOptionsIds: Set<String>,
     onOptionClick: (OptionGroup, Option) -> Unit,
     onQuantityChange: (Int) -> Unit,
-    onAddToCart: () -> Unit,
+    onAddToCart: (CartItem) -> Unit,
     onBackClick: () -> Unit
 ) {
 
@@ -72,15 +80,42 @@ fun DishDetailScreen(
         }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            Button(
-                onClick = onAddToCart,
-                enabled = requiredDone,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text("Add to cart")
+            Column(modifier = Modifier.navigationBarsPadding()) {
+                if (!requiredDone) {
+                    Text(
+                        "Please choose all required options",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+                Button(
+                    onClick = {
+                        onAddToCart(
+                            CartItem(
+                                id = UUID.randomUUID().toString(),
+                                dishId = dish.id,
+                                name = dish.name,
+                                quantity = quantity,
+                                optionNames = selectedOptions.map { it.name },
+                                lineTotalCents = totalCents
+                            )
+                        )
+                    },
+                    enabled = requiredDone,
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Wine,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(52.dp)
+                ) {
+                    Text("Add to cart")
+                }
             }
         }
     ) { padding ->
@@ -98,7 +133,9 @@ fun DishDetailScreen(
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 QuantityStepper(
@@ -121,7 +158,8 @@ fun DishDetailScreen(
 
                     onOptionClick = {
                         onOptionClick(group, it)
-                    }
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
 
@@ -137,34 +175,35 @@ fun HeaderImage(
     dish: Dish,
     onBackClick: () -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(dish.image),
+            contentDescription = dish.name,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.1f)
+                .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+        )
 
         IconButton(
             onClick = onBackClick,
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = Color.White.copy(alpha = 0.8f),
+                contentColor = Ink
+            ),
             modifier = Modifier
                 .statusBarsPadding()
-                .align(Alignment.Start)
+                .padding(12.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }
-
-        Image(
-            painter = painterResource(dish.image),
-            contentDescription = dish.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(24.dp)
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .clip(CircleShape)
-        )
     }
 }
+
 
 @Composable
 fun DishInfo(
@@ -178,23 +217,26 @@ fun DishInfo(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Column {
 
                 Text(
                     text = dish.name,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Ready in about 25 min"
+                    text = "Ready in about 25 min", style = MaterialTheme.typography.bodySmall
                 )
             }
 
             Text(
                 text = "%.2f €".format(totalCents / 100.0),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
                 color = Wine
             )
         }
@@ -238,7 +280,7 @@ fun DishDetailRoute(
             selectedOptionsIds =
                 selectedOptionsIds.toggle(group, option)
         },
-        onAddToCart = onAddedToCart,
+        onAddToCart = {item -> onAddedToCart()},
         onBackClick = onBack
     )
 }

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
-
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -41,6 +41,11 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+
+    //Hilt
+    implementation(libs.hilt.android)
+    debugImplementation(libs.androidx.ui.tooling)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
