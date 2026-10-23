@@ -1,6 +1,5 @@
 package com.screen
 
-import android.R.attr.onClick
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -280,7 +278,7 @@ fun DishDetailRoute(
             selectedOptionsIds =
                 selectedOptionsIds.toggle(group, option)
         },
-        onAddToCart = {item -> onAddedToCart()},
+        onAddToCart = { item -> onAddedToCart() },
         onBackClick = onBack
     )
 }
