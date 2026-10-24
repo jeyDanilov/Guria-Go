@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 37
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,7 +27,7 @@ dependencies {
 
     implementation(project(":domain"))
 
-    // Compose BOM (gives the version to all Compose libraries without a version)
+    // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
 
 

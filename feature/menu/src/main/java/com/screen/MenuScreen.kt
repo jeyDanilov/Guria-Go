@@ -212,10 +212,8 @@ fun MenuScreenPreview() {
 
     MaterialTheme {
         MenuScreen(
-            categories = listOf(
-                "Hot Dishes", "Cold Dishes", "Salads", "Desserts"
-            ),
-            selectedCategory = "Hot Dishes",
+            categories = FakeDishes.category,
+            selectedCategory = selectedCategory,
             dishes = dishes,
             query = query,
             onQueryChange = { query = it },
