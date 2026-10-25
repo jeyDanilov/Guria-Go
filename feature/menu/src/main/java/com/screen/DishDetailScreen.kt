@@ -42,11 +42,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.model.CartItem
 import com.model.Option
 import com.model.OptionGroup
 import com.pricing.calculateTotalCents
 import com.pricing.toggle
+import com.viewmodel.DishDetailViewModel
 import java.util.UUID
 
 
@@ -253,7 +255,8 @@ fun DishInfo(
 fun DishDetailRoute(
     dishId: Int,
     onBack: () -> Unit,
-    onAddedToCart: () -> Unit
+    onAddedToCart: () -> Unit,
+    viewModel: DishDetailViewModel = hiltViewModel()
 ) {
     val dish = remember(dishId) {
         FakeDishes.byId(dishId)
@@ -278,7 +281,8 @@ fun DishDetailRoute(
             selectedOptionsIds =
                 selectedOptionsIds.toggle(group, option)
         },
-        onAddToCart = { item -> onAddedToCart() },
+        onAddToCart = { item -> viewModel.addToCart(item)
+        onAddedToCart()},
         onBackClick = onBack
     )
 }
@@ -290,11 +294,19 @@ fun DishDetailRoute(
 )
 @Composable
 fun DishDetailPreview() {
+    val dish = FakeDishes.byId(4)
+    var quantity by remember {mutableIntStateOf(dish.pricing.minQuantity)}
+    var selected by remember {mutableStateOf(emptySet<String>())}
+
     MaterialTheme {
-        DishDetailRoute(
-            dishId = 4,
-            onBack = {},
-            onAddedToCart = {}
+        DishDetailScreen(
+            dish = dish,
+            quantity = quantity,
+            selectedOptionsIds = selected,
+            onOptionClick = { group, option -> selected = selected.toggle(group, option)},
+            onQuantityChange = {quantity = it},
+            onBackClick = {},
+            onAddToCart = {}
         )
     }
 }

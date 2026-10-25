@@ -28,11 +28,5 @@ class InMemoryCartRepository @Inject constructor() : CartRepository {
     override fun clear() {
         _items.value = emptyList()
     }
-
-    @Module
-    @InstallIn(SingletonComponent::class)
-    abstract class CartModule {
-        @Binds
-        abstract fun bindCartRepository(impl: InMemoryCartRepository): CartRepository
-    }
 }
+

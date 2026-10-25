@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.hilt.android)
     debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     //Icons
     implementation(libs.androidx.compose.material.icons.core)

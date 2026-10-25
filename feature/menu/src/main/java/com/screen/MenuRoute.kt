@@ -23,7 +23,7 @@ fun MenuRoute(onDishClick: (Dish) -> Unit) {
         dishes = dishes,
         query = query,
         onQueryChange = { query = it },
-        onCategorySelected = {},
+        onCategorySelected = {selectedCategory = it},
         onAddClick = onDishClick
     )
 }
