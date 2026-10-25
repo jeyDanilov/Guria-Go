@@ -8,19 +8,24 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.viewmodel.CartViewModel
 
 @Composable
-fun CartRoute(onBack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(16.dp)
-    ) {
-        Text("Cart", style = MaterialTheme.typography.headlineMedium)
-        Text("Coming soon")
-        Button(onClick = onBack) { Text("Back") }
-    }
+fun CartRoute(
+    onBack: () -> Unit,
+    viewModel: CartViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    CartScreen(
+        state = state,
+        onFormChange = viewModel::onFormChange,
+        onRemove = viewModel::onRemove,
+        onSend = viewModel::onSendOrder,
+        onBack = onBack
+    )
 }
