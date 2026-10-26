@@ -81,6 +81,7 @@ fun DishDetailScreen(
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Column(modifier = Modifier.navigationBarsPadding()) {
                 if (!requiredDone) {
