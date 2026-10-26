@@ -25,7 +25,6 @@ android {
 
 dependencies {
 
-    implementation(project(":domain"))
 
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
