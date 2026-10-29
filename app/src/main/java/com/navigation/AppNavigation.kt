@@ -44,11 +44,11 @@ fun AppNavigation() {
                 DishDetailRoute(
                     dishId = key.dishId,
                     onBack = { backStack.removeLastOrNull() },
-                    onAddedToCart = { backStack.removeLastOrNull() }
+                    onAddedToCart = { backStack.add(CartKey) }
                 )
             }
             entry<CartKey> {
-                CartRoute(onBack = { backStack.removeLastOrNull() })
+                CartRoute(onBack = { backStack.removeLastOrNull() },)
             }
         }
     )

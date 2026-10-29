@@ -3,7 +3,9 @@ package com.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.model.CheckoutForm
+import com.model.Order
 import com.repository.CartRepository
+import com.repository.OrderRepository
 import com.uistate.CartUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -12,10 +14,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    private val cart: CartRepository
+    private val cart: CartRepository,
+    private val orders: OrderRepository
 ) : ViewModel() {
     private val form = MutableStateFlow(CheckoutForm())
 
@@ -32,7 +36,11 @@ class CartViewModel @Inject constructor(
     fun onRemove(id: String) = cart.remove(id)
 
     fun onSendOrder() {
-        // next step: send the order by WhatsApp
+        val state = uiState.value
+        if(!state.canSend) return
+        viewModelScope.launch {
+            orders.placeOrder(Order(state.items, state.form))
+        }
     }
 
 }

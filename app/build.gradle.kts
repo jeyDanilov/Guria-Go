@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":feature:cart"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":ui"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

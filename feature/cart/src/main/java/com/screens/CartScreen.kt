@@ -59,22 +59,25 @@ fun CartScreen(
         topBar = { CartTopBar(onBack) },
         bottomBar = {
             if (state.items.isNotEmpty()) {
-                Column(modifier = Modifier.navigationBarsPadding()) {
-                    Text(
-                        "Your name, phone and address are sent to the bar to prepare your order. ",
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Button(
-                        onClick = onSend,
-                        enabled = state.canSend,
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .height(52.dp)
-                    ) {
-                        Text("Send order · %.2f €".format(state.totalCents / 100.0))
+                Surface(shadowElevation = 8.dp, color = MaterialTheme.colorScheme.background) {
+
+                    Column(modifier = Modifier.navigationBarsPadding()) {
+                        Text(
+                            "Your name, phone and address are sent to the bar to prepare your order. ",
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                        Button(
+                            onClick = onSend,
+                            enabled = state.canSend,
+                            shape = MaterialTheme.shapes.medium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .height(52.dp)
+                        ) {
+                            Text("Send order · %.2f €".format(state.totalCents / 100.0))
+                        }
                     }
                 }
             }
@@ -159,60 +162,60 @@ fun CartScreen(
     }
 }
 
-    @Composable
-    private fun CartTopBar(onBack: () -> Unit) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 8.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-            }
-            Text(
-                "Your order",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+@Composable
+private fun CartTopBar(onBack: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .padding(horizontal = 8.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconButton(onClick = onBack) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+        }
+        Text(
+            "Your order",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+private fun EmptyCart(onBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 64.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    )
+    {
+        Text("your cart is empty", style = MaterialTheme.typography.titleMedium)
+        Button(onClick = onBack) { Text("Back to menu") }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 780)
+@Composable
+fun CartScreenPreview() {
+    var form by remember { mutableStateOf(CheckoutForm(type = OrderType.DELIVERY)) }
+    val items = listOf(
+        CartItem("1", 4, "Wrap", 2, listOf("Chicken", "Spicy"), 2490),
+        CartItem("2", 1, "Khinkali", 5, emptyList(), 1250),
+    )
+
+    GuriaGoTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CartScreen(
+                state = CartUiState(items = items, form = form),
+                onFormChange = { form = it },
+                onRemove = {},
+                onSend = {},
+                onBack = {}
             )
         }
     }
-
-    @Composable
-    private fun EmptyCart(onBack: () -> Unit) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 64.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        )
-        {
-            Text("your cart is empty", style = MaterialTheme.typography.titleMedium)
-            Button(onClick = onBack) { Text("Back to menu") }
-        }
-    }
-
-    @Preview(showBackground = true, widthDp = 360, heightDp = 780)
-    @Composable
-    fun CartScreenPreview() {
-        var form by remember { mutableStateOf(CheckoutForm(type = OrderType.DELIVERY)) }
-        val items = listOf(
-            CartItem("1", 4, "Wrap", 2, listOf("Chicken", "Spicy"), 2490),
-            CartItem("2", 1, "Khinkali", 5, emptyList(), 1250),
-        )
-
-        GuriaGoTheme {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                CartScreen(
-                    state = CartUiState(items = items, form = form),
-                    onFormChange = { form = it },
-                    onRemove = {},
-                    onSend = {},
-                    onBack = {}
-                )
-            }
-        }
-    }
+}
 
