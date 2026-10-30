@@ -167,13 +167,13 @@ fun MenuHeader(
 
     {
         Text(
-            "Guria GO",
+            "Guria To GO",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
         Text(
-            "Georgian kitchen",
+            "Сocina georgiana",
             style = MaterialTheme.typography.bodyLarge,
             color = Color(0xFFD9A441)
         )
@@ -182,7 +182,7 @@ fun MenuHeader(
             value = query,
             onValueChange = onQueryChange,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search for a dish") },
+            placeholder = { Text("Buscar un plato") },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             singleLine = true,
             shape = RoundedCornerShape(16.dp),

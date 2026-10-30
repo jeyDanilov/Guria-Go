@@ -17,6 +17,7 @@ class WhatsAppOrderRepository @Inject constructor(
         val uri = Uri.parse(
             "https://wa.me/$BAR_PHONE?text=${Uri.encode(message)}"
         )
+        android.util.Log.d("OrderLink", uri.toString())
 
         val intent = Intent(Intent.ACTION_VIEW, uri).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -26,6 +27,6 @@ class WhatsAppOrderRepository @Inject constructor(
     }
 
     private companion object {
-        const val BAR_PHONE = "34603371944"
+        const val BAR_PHONE = "34629029511"
     }
 }

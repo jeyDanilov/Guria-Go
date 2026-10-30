@@ -63,7 +63,7 @@ fun CartScreen(
 
                     Column(modifier = Modifier.navigationBarsPadding()) {
                         Text(
-                            "Your name, phone and address are sent to the bar to prepare your order. ",
+                            "Tu nombre, teléfono y dirección se envían a la barra para preparar tu pedido. ",
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
@@ -76,7 +76,7 @@ fun CartScreen(
                                 .padding(16.dp)
                                 .height(52.dp)
                         ) {
-                            Text("Send order · %.2f €".format(state.totalCents / 100.0))
+                            Text("Enviar pedido · %.2f €".format(state.totalCents / 100.0))
                         }
                     }
                 }
@@ -94,51 +94,51 @@ fun CartScreen(
             if (state.items.isEmpty()) {
                 EmptyCart(onBack)
             } else {
-                SectionCard("Your items") {
+                SectionCard("Tus artículos") {
                     state.items.forEachIndexed { index, item ->
                         CartItemRow(item = item, onRemove = { onRemove(item.id) })
                         if (index < state.items.lastIndex) HorizontalDivider()
                     }
                 }
-                SectionCard("How do you want it?") {
+                SectionCard("¿Cómo lo quieres?") {
                     OrderTypeSwitch(
                         selected = state.form.type,
                         onSelected = { onFormChange(state.form.copy(type = it)) }
                     )
                 }
-                SectionCard("Your details") {
+                SectionCard("Tus datos") {
                     GuriaTextField(
                         value = state.form.name,
                         onValueChange = { onFormChange(state.form.copy(name = it)) },
-                        label = "Name",
+                        label = "Nombre",
                         keyboardOption = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
                     )
                     GuriaTextField(
                         value = state.form.phone,
                         onValueChange = { onFormChange(state.form.copy(phone = it)) },
-                        label = "Phone",
+                        label = "Teléfono",
                         keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Phone)
                     )
                 }
                 if (state.form.type == OrderType.DELIVERY) {
-                    SectionCard("Delivery address") {
+                    SectionCard("Dirección de entrega") {
                         GuriaTextField(
                             value = state.form.address,
                             onValueChange = { onFormChange(state.form.copy(address = it)) },
-                            label = "Street and number"
+                            label = "Calle y número"
                         )
                         GuriaTextField(
                             value = state.form.details,
                             onValueChange = { onFormChange(state.form.copy(details = it)) },
-                            label = "Floor, door (optional)"
+                            label = "Suelo, puerta (opcional)"
                         )
                     }
                 }
-                SectionCard("Note for the kitchen") {
+                SectionCard("Nota para la cocina") {
                     GuriaTextField(
                         value = state.form.notes,
                         onValueChange = { onFormChange(state.form.copy(notes = it)) },
-                        label = "Optional",
+                        label = "Opcional",
                         singleLine = false
                     )
                 }
@@ -175,7 +175,7 @@ private fun CartTopBar(onBack: () -> Unit) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
         }
         Text(
-            "Your order",
+            "Tu pedido",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
@@ -192,8 +192,8 @@ private fun EmptyCart(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     )
     {
-        Text("your cart is empty", style = MaterialTheme.typography.titleMedium)
-        Button(onClick = onBack) { Text("Back to menu") }
+        Text("Tu carrito está vacío", style = MaterialTheme.typography.titleMedium)
+        Button(onClick = onBack) { Text("Volver al menú") }
     }
 }
 
@@ -202,7 +202,7 @@ private fun EmptyCart(onBack: () -> Unit) {
 fun CartScreenPreview() {
     var form by remember { mutableStateOf(CheckoutForm(type = OrderType.DELIVERY)) }
     val items = listOf(
-        CartItem("1", 4, "Wrap", 2, listOf("Chicken", "Spicy"), 2490),
+        CartItem("1", 4, "Wrap", 2, listOf("Pollo", "Picante"), 2490),
         CartItem("2", 1, "Khinkali", 5, emptyList(), 1250),
     )
 

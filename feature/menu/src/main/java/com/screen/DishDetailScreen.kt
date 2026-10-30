@@ -86,7 +86,7 @@ fun DishDetailScreen(
             Column(modifier = Modifier.navigationBarsPadding()) {
                 if (!requiredDone) {
                     Text(
-                        "Please choose all required options",
+                        "Por favor, selecciona todas las opciones requeridas.",
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -115,7 +115,7 @@ fun DishDetailScreen(
                         .padding(16.dp)
                         .height(52.dp)
                 ) {
-                    Text("Add to cart")
+                    Text("Añadir a la cesta")
                 }
             }
         }
@@ -230,7 +230,7 @@ fun DishInfo(
                 )
 
                 Text(
-                    text = "Ready in about 25 min", style = MaterialTheme.typography.bodySmall
+                    text = "Listo en unos 25 minutos", style = MaterialTheme.typography.bodySmall
                 )
             }
 

@@ -79,11 +79,11 @@ fun OptionGroupSection(
 fun SingleChoicePreview() {
     val group = OptionGroup(
         id = "spice",
-        title = "Spiciness",
+        title = "Picante",
         type = SelectionType.SINGLE,
         options = listOf(
-            Option("mild", "Not spicy"),
-            Option("hot", "Spicy")
+            Option("leve", "No pica"),
+            Option("caliente", "Picante")
         ),
         required = true
     )
@@ -102,12 +102,12 @@ fun SingleChoicePreview() {
 @Composable
 fun MeatChoicePreview() {
     val group = OptionGroup(
-        id = "meat ",
-        title = "Meat",
+        id = "carne ",
+        title = "Carne",
         type = SelectionType.SINGLE,
         options = listOf(
-            Option("chicken", "Chicken"),
-            Option("pork", "Pork")
+            Option("pollo", "Pollo"),
+            Option("cerda", "Cerda")
         ),
         required = true
     )
