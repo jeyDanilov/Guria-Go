@@ -4,7 +4,6 @@ import com.extension.statusAt
 import com.model.OpenStatus
 import com.repository.RestaurantRepository
 import jakarta.inject.Inject
-import jdk.jfr.internal.OldObjectSample.emit
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

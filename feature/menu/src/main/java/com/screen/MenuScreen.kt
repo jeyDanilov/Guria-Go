@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -22,12 +23,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -46,6 +50,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.extensions.label
+import com.model.OpenStatus
 import com.model.OptionGroup
 import com.model.Pricing
 import com.model.basePriceCents
@@ -68,7 +74,8 @@ fun DishCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
@@ -119,10 +126,22 @@ fun MenuScreen(
     onQueryChange: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onAddClick: (Dish) -> Unit,
+    openStatus: OpenStatus?,
+    onInfoClick: () -> Unit,
+    cartCount: Int,
+    cartTotalCents: Int,
+    onCartClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        MenuHeader(query = query, onQueryChange = onQueryChange)
+        openStatus?.let {
+            MenuHeader(
+                query = query,
+                onQueryChange = onQueryChange,
+                onInfoClick = onInfoClick,
+                openStatus = it
+            )
+        }
 
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -147,12 +166,29 @@ fun MenuScreen(
                 DishCard(dish = dish, onAddClick = { onAddClick(dish) })
             }
         }
+        if (cartCount > 0) {
+            Button(
+                onClick = onCartClick,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(52.dp)
+            ) {
+                Text("View order · $cartCount · %.2f €".format(cartTotalCents / 100.0))
+            }
+        }
     }
 }
 
 @Composable
 fun MenuHeader(
-    query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier
+    query: String,
+    onQueryChange: (String) -> Unit,
+    openStatus: OpenStatus?,
+    onInfoClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -163,21 +199,38 @@ fun MenuHeader(
             )
             .statusBarsPadding()
             .padding(horizontal = 16.dp, vertical = 24.dp)
-    )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Guria To GO",
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = "Cocina georgiana",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFFD9A441)
+                )
+                if (openStatus != null) {
+                    Text(
+                        openStatus.label(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White
+                    )
+                }
+            }
+            IconButton(onClick = onInfoClick) {
+                Icon(Icons.Default.Info, contentDescription = "About the bar", tint = Color.White)
+            }
+        }
 
-    {
-        Text(
-            "Guria To GO",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Text(
-            "Сocina georgiana",
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color(0xFFD9A441)
-        )
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
         TextField(
             value = query,
             onValueChange = onQueryChange,
@@ -191,12 +244,9 @@ fun MenuHeader(
                 unfocusedContainerColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
-
             )
         )
     }
-
-
 }
 
 
@@ -218,6 +268,11 @@ fun MenuScreenPreview() {
             selectedCategory = selectedCategory,
             dishes = dishes,
             query = query,
+            onInfoClick = {},
+            cartCount = 2,
+            cartTotalCents = 3740,
+            onCartClick = {},
+            openStatus = OpenStatus.Closed(null, null),
             onQueryChange = { query = it },
             onCategorySelected = { selectedCategory = it },
             onAddClick = {})

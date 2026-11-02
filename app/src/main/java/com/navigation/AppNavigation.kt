@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.screen.DishDetailRoute
+import com.screen.InfoRoute
 import com.screen.MenuRoute
 import com.screens.CartRoute
 import kotlinx.serialization.Serializable
@@ -21,6 +22,11 @@ data class DishDetailKey(val dishId: Int) : NavKey
 @Serializable
 data object CartKey : NavKey
 
+@Serializable
+data object InfoKey : NavKey
+
+@Serializable
+data object OrderSentKey : NavKey
 
 @Composable
 fun AppNavigation() {
@@ -37,7 +43,9 @@ fun AppNavigation() {
         entryProvider = entryProvider {
             entry<MenuKey> {
                 MenuRoute(
-                    onDishClick = { dish -> backStack.add(DishDetailKey(dish.id)) }
+                    onDishClick = { dish -> backStack.add(DishDetailKey(dish.id)) },
+                    onCartClick = { backStack.add(CartKey) },
+                    onInfoClick = {backStack.add(InfoKey)}
                 )
             }
             entry<DishDetailKey> { key ->
@@ -48,7 +56,10 @@ fun AppNavigation() {
                 )
             }
             entry<CartKey> {
-                CartRoute(onBack = { backStack.removeLastOrNull() },)
+                CartRoute(onBack = { backStack.removeLastOrNull() })
+            }
+            entry<InfoKey> {
+                InfoRoute(onBack = { backStack.removeLastOrNull() })
             }
         }
     )

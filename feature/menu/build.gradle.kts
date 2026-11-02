@@ -27,6 +27,7 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(project(":ui"))
+    implementation(project(":feature:cart"))
 
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
@@ -37,7 +38,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.material)
 
     //Hilt

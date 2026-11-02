@@ -5,9 +5,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.viewmodel.MenuViewModel
 
 @Composable
-fun MenuRoute(onDishClick: (Dish) -> Unit) {
+fun MenuRoute(onDishClick: (Dish) -> Unit,
+              onInfoClick: () -> Unit,
+              onCartClick: () -> Unit,
+              viewModel: MenuViewModel = hiltViewModel())
+{
+    val openStatus by viewModel.openStatus.collectAsStateWithLifecycle()
+    val cartSummary by viewModel.cartSummary.collectAsStateWithLifecycle()
+
     var query by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(FakeDishes.category.first()) }
 
@@ -23,7 +33,12 @@ fun MenuRoute(onDishClick: (Dish) -> Unit) {
         dishes = dishes,
         query = query,
         onQueryChange = { query = it },
-        onCategorySelected = {selectedCategory = it},
-        onAddClick = onDishClick
+        onCategorySelected = { selectedCategory = it },
+        onAddClick = onDishClick,
+        openStatus = openStatus,
+        onInfoClick = onInfoClick,
+        cartCount = cartSummary.count,
+        cartTotalCents = cartSummary.totalCents,
+        onCartClick = onCartClick
     )
 }

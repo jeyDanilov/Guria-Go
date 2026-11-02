@@ -23,10 +23,10 @@ runtime = "1.12.1"
 uiToolingPreview = "1.12.1"
 uiTooling = "1.12.1"
 material3 = "1.4.0"
-firebaseCrashlyticsBuildtools = "3.0.8"
 navigation3 = "1.1.3"
 androidxHilt = "1.4.0"
 lifecycle = "2.11.0"
+jakartaInject = "2.0.1"
 
 
 [libraries]
@@ -49,6 +49,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakartaInject" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
@@ -71,7 +72,6 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", vers
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
-firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 
 androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
