@@ -21,13 +21,13 @@ fun CheckoutFormSection(form: CheckoutForm, onFormChange: (CheckoutForm) -> Unit
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
-                selected = form.type == OrderType.TAKEAWAY,
-                onClick = { onFormChange(form.copy(type = OrderType.TAKEAWAY)) },
+                selected = form.type == OrderType.LLEVAR,
+                onClick = { onFormChange(form.copy(type = OrderType.LLEVAR)) },
                 label = { Text("Take away") }
             )
             FilterChip(
-                selected = form.type == OrderType.DELIVERY,
-                onClick = { onFormChange(form.copy(type = OrderType.DELIVERY)) },
+                selected = form.type == OrderType.ENTREGA,
+                onClick = { onFormChange(form.copy(type = OrderType.ENTREGA)) },
                 label = { Text("Delivery") }
             )
         }
@@ -47,7 +47,7 @@ fun CheckoutFormSection(form: CheckoutForm, onFormChange: (CheckoutForm) -> Unit
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth()
         )
-        if (form.type == OrderType.DELIVERY) {
+        if (form.type == OrderType.ENTREGA) {
             OutlinedTextField(
                 value = form.address,
                 onValueChange = { onFormChange(form.copy(address = it)) },

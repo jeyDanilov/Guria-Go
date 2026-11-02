@@ -100,15 +100,15 @@ fun InfoScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            SectionCard("Address") {
+            SectionCard("Dirección") {
                 Text(info.address)
-                OutlinedButton(onClick = onOpenMaps) { Text("Open in Maps") }
+                OutlinedButton(onClick = onOpenMaps) { Text("Abierto en mapas") }
             }
-            SectionCard("Phone") {
+            SectionCard("Teléfono") {
                 Text(info.phone)
-                OutlinedButton(onClick = onCall) { Text("Call") }
+                OutlinedButton(onClick = onCall) { Text("Llamar") }
             }
-            SectionCard("Opening hours") {
+            SectionCard("Horario de apertura") {
                 DayOfWeek.entries.forEach { day ->
                     val slots = info.hours.filter { it.day == day }
                     Row(
@@ -118,13 +118,13 @@ fun InfoScreen(
                     {
                         Text(day.getDisplayName(TextStyle.FULL, Locale.getDefault()))
                         Text(
-                            if (slots.isEmpty()) "Closed"
+                            if (slots.isEmpty()) "Cerrado"
                             else slots.joinToString { "${it.open} - ${it.close}" }
                         )
                     }
                 }
             }
-            SectionCard("Pick-up") {
+            SectionCard("Levantar") {
                 Text(info.pickupNote)
             }
         }
@@ -141,7 +141,7 @@ fun InfoScreenPreview(){
         hours = DayOfWeek.entries
             .filter { it != DayOfWeek.TUESDAY }
             .map { OpeningHours(it, LocalTime.of(9,0), LocalTime.of(22,0)) },
-        pickupNote = "Pick up your order at the bar counter."
+        pickupNote = "Recoge tu pedido en la barra."
     )
     GuriaGoTheme {
         Surface(color = MaterialTheme.colorScheme.background) {

@@ -6,14 +6,14 @@ import java.util.Locale
 
 
 fun OpenStatus.label(): String = when (this) {
-    is OpenStatus.Open -> "Open now · until $closesAt"
+    is OpenStatus.Open -> "Abierto ahora · hasta $closesAt"
     is OpenStatus.Closed -> {
         val day = opensDay
         val time = opensAt
         if (day == null || time == null) {
-            "Closed"
+            "Cerrado"
         } else {
-            "Closed · opens ${day.getDisplayName(TextStyle.FULL, Locale.getDefault())} at $time"
+            "Cerrado · abre ${day.getDisplayName(TextStyle.FULL, Locale.getDefault())} en $time"
         }
     }
 }

@@ -120,7 +120,7 @@ fun CartScreen(
                         keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Phone)
                     )
                 }
-                if (state.form.type == OrderType.DELIVERY) {
+                if (state.form.type == OrderType.ENTREGA) {
                     SectionCard("Dirección de entrega") {
                         GuriaTextField(
                             value = state.form.address,
@@ -200,7 +200,7 @@ private fun EmptyCart(onBack: () -> Unit) {
 @Preview(showBackground = true, widthDp = 360, heightDp = 780)
 @Composable
 fun CartScreenPreview() {
-    var form by remember { mutableStateOf(CheckoutForm(type = OrderType.DELIVERY)) }
+    var form by remember { mutableStateOf(CheckoutForm(type = OrderType.ENTREGA)) }
     val items = listOf(
         CartItem("1", 4, "Wrap", 2, listOf("Pollo", "Picante"), 2490),
         CartItem("2", 1, "Khinkali", 5, emptyList(), 1250),

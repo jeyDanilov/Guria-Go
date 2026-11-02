@@ -5,7 +5,7 @@ import com.model.OrderType
 
 fun Order.toWhatsAppMessage(): String = buildString {
     appendLine("Nuevo pedido - Guria Go")
-    appendLine(if(form.type == OrderType.DELIVERY) "Tipo: A domicilio" else "Tipo: Para recoger")
+    appendLine(if(form.type == OrderType.ENTREGA) "Tipo: A domicilio" else "Tipo: Para recoger")
     appendLine()
     items.forEach { item ->
         val options = if(item.optionNames.isEmpty()) "" else "(${item.optionNames.joinToString(", ")})"
@@ -16,7 +16,7 @@ fun Order.toWhatsAppMessage(): String = buildString {
     appendLine()
     appendLine("Nombre: ${form.name}")
     appendLine("Teléfono: ${form.phone}")
-    if(form.type == OrderType.DELIVERY) {
+    if(form.type == OrderType.ENTREGA) {
         appendLine("Dirección: ${form.address} ${form.details}".trim())
     }
     if(form.notes.isNotBlank()) appendLine("Nota: ${form.notes}")

@@ -176,7 +176,7 @@ fun MenuScreen(
                     .padding(16.dp)
                     .height(52.dp)
             ) {
-                Text("View order · $cartCount · %.2f €".format(cartTotalCents / 100.0))
+                Text("Ver pedido · ($cartCount) · %.2f €".format(cartTotalCents / 100.0))
             }
         }
     }
@@ -225,7 +225,7 @@ fun MenuHeader(
                 }
             }
             IconButton(onClick = onInfoClick) {
-                Icon(Icons.Default.Info, contentDescription = "About the bar", tint = Color.White)
+                Icon(Icons.Default.Info, contentDescription = "Sobre el bar", tint = Color.White)
             }
         }
 

@@ -45,7 +45,7 @@ fun AppNavigation() {
                 MenuRoute(
                     onDishClick = { dish -> backStack.add(DishDetailKey(dish.id)) },
                     onCartClick = { backStack.add(CartKey) },
-                    onInfoClick = {backStack.add(InfoKey)}
+                    onInfoClick = {backStack.add(InfoKey    )}
                 )
             }
             entry<DishDetailKey> { key ->
