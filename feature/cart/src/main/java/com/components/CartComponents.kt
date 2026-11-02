@@ -121,7 +121,7 @@ fun OrderTypeSwitch(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if (type == OrderType.LLEVAR) "Take away" else "Delivery",
+                    text = if (type == OrderType.LLEVAR) "Llevar" else "Entrega",
                     fontWeight = FontWeight.SemiBold,
                     color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                 )

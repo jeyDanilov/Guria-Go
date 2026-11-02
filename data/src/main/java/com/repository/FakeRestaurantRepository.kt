@@ -14,7 +14,7 @@ class FakeRestaurantRepository @Inject constructor(): RestaurantRepository {
         address = "Avenida Ingenieros del Mopu, 7",
         phone = "+34629029511",
         hours = DayOfWeek.entries
-            .filter { it != DayOfWeek.THURSDAY }
+            .filter { it != DayOfWeek.TUESDAY }
             .map { OpeningHours (it, LocalTime.of(9,0), LocalTime.of(22,0))},
         pickupNote = "Recoge tu pedido en la barra. Estará listo en unos 20 minutos."
     )
