@@ -70,10 +70,12 @@ data class Dish(
 @Composable
 fun DishCard(
     dish: Dish,
+    onClick: () -> Unit,
     onAddClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -163,7 +165,7 @@ fun MenuScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(dishes, key = { it.id }) { dish ->
-                DishCard(dish = dish, onAddClick = { onAddClick(dish) })
+                DishCard(dish = dish, onAddClick = { onAddClick(dish) }, onClick = {onAddClick(dish)})
             }
         }
         if (cartCount > 0) {
