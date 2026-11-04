@@ -136,12 +136,12 @@ fun CartScreen(
                             onValueChange = { onFormChange(state.form.copy(address = it)) },
                             label = "Calle y número"
                         )
-                        GuriaTextField(
-                            value = state.form.details,
-                            onValueChange = { onFormChange(state.form.copy(details = it)) },
-                            label = "Suelo, puerta (opcional)"
-                        )
                     }
+                    GuriaTextField(
+                        value = state.form.details,
+                        onValueChange = { onFormChange(state.form.copy(details = it)) },
+                        label = "Suelo, puerta (opcional)"
+                    )
                 }
                 SectionCard("Nota para la cocina") {
                     GuriaTextField(

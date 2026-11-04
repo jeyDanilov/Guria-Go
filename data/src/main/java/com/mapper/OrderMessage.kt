@@ -9,7 +9,7 @@ fun Order.toWhatsAppMessage(): String = buildString {
     appendLine()
     items.forEach { item ->
         val options = if(item.optionNames.isEmpty()) "" else "(${item.optionNames.joinToString(", ")})"
-        appendLine(". ${item.quantity} * ${item.name}$options - %.2f €".format(item.lineTotalCents / 100.0))
+        appendLine(" (${item.quantity}) * ${item.name}$options - %.2f €".format(item.lineTotalCents / 100.0))
     }
 
     if(deliveryFeeCents > 0) appendLine("Envio: %.2f €".format(deliveryFeeCents / 100.0))
@@ -20,8 +20,9 @@ fun Order.toWhatsAppMessage(): String = buildString {
     appendLine()
     appendLine("Nombre: ${form.name}")
     appendLine("Teléfono: ${form.phone}")
-    if(form.type == OrderType.ENTREGA) {
-        appendLine("Dirección: ${form.address} ${form.details}".trim())
+    if (form.type == OrderType.ENTREGA) {
+        appendLine("Dirección: ${form.address}")
+        appendLine("Suelo, puerta: ${form.details}")
     }
     if(form.notes.isNotBlank()) appendLine("Nota: ${form.notes}")
 }
