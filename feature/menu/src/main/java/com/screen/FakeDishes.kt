@@ -49,7 +49,7 @@ object FakeDishes {
                     type = SelectionType.SINGLE,
                     options = listOf(
                         Option("pollo", "Pollo"),
-                        Option("cerda", "Cerda")
+                        Option("cerda", "Cerdo")
                     ),
                     required = true
                 ),

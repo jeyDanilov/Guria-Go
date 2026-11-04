@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.components.CartItemRow
 import com.components.GuriaTextField
 import com.components.OrderTypeSwitch
+import com.components.PaymentSwitch
 import com.components.SectionCard
 import com.components.SummaryRow
 import com.model.CartItem
@@ -137,10 +138,23 @@ fun CartScreen(
                             label = "Calle y número"
                         )
                     }
+
                     GuriaTextField(
                         value = state.form.details,
                         onValueChange = { onFormChange(state.form.copy(details = it)) },
                         label = "Suelo, puerta (opcional)"
+                    )
+                }
+
+                SectionCard("Forma de pago") {
+                    PaymentSwitch(
+                        selected = state.form.payment,
+                        onSelect = { onFormChange(state.form.copy(payment = it)) }
+                    )
+                    Text(
+                        text = if (state.form.payment == null) "Elige cómo vas a pagar al recibir tu pedido."
+                        else "Pagas al repartidor cuando recibas tu pedido.",
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
                 SectionCard("Nota para la cocina") {
