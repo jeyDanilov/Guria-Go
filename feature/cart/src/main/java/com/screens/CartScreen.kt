@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -43,6 +42,7 @@ import com.components.CartItemRow
 import com.components.GuriaTextField
 import com.components.OrderTypeSwitch
 import com.components.SectionCard
+import com.components.SummaryRow
 import com.model.CartItem
 import com.model.CheckoutForm
 import com.model.OrderType
@@ -58,17 +58,19 @@ fun CartScreen(
     onSend: () -> Unit,
     onBack: () -> Unit
 ) {
-    val imeVisible = WindowInsets.isImeVisible
-    
     Scaffold(
         modifier = Modifier.imePadding(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = { CartTopBar(onBack) },
         bottomBar = {
-            if (state.items.isNotEmpty() && !imeVisible) {
+            if (state.items.isNotEmpty()) {
                 Surface(shadowElevation = 8.dp, color = MaterialTheme.colorScheme.background) {
 
-                    Column(modifier = Modifier.navigationBarsPadding()) {
+                    Column(
+                        modifier = Modifier
+                            .navigationBarsPadding()
+                            .imePadding()
+                    ) {
                         Text(
                             "Tu nombre, teléfono y dirección se envían a la barra para preparar tu pedido. ",
                             style = MaterialTheme.typography.bodySmall,
@@ -149,18 +151,28 @@ fun CartScreen(
                         singleLine = false
                     )
                 }
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text("Total", style = MaterialTheme.typography.titleLarge)
-                    Text(
+                    if (state.deliveryFeeCents > 0) {
+                        SummaryRow(
+                            "Envío",
+                            "%.2f €".format(state.deliveryFeeCents / 100.0)
+                        )
+                    }
+
+                    SummaryRow(
+                        "Tiempo estimado",
+                        "${state.estimate.first}-${state.estimate.last} min"
+                    )
+
+                    SummaryRow(
+                        "Total",
                         "%.2f €".format(state.totalCents / 100.0),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        emphasized = true
                     )
                 }
                 Spacer(Modifier.height(8.dp))

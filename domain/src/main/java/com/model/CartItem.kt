@@ -6,5 +6,7 @@ data class CartItem(
     val name: String,
     val quantity: Int,
     val optionNames: List<String>,
-    val lineTotalCents: Int
+    val lineTotalCents: Int,
+    val prepMinMinutes: Int = 20,
+    val prepMaxMinutes: Int = 25
 )

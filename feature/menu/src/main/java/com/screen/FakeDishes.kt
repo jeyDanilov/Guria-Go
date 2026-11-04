@@ -38,6 +38,8 @@ object FakeDishes {
             name = "Wrap",
             description = "Tortilla de trigo suave y ligeramente tostada, rellena de una combinación de carne a elegir, ingredientes frescos y una deliciosa salsa.  Una opción sabrosa y práctica, perfecta para disfrutar de una comida completa.",
             pricing = Pricing.Fixed(1245),
+            prepMinMinutes = 20,
+            prepMaxMinutes = 25,
             image = R.drawable.wrap,
             categories = listOf("Platos Calientes"),
             optionGroups = listOf(

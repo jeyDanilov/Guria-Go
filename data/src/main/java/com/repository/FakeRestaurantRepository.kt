@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class FakeRestaurantRepository @Inject constructor(): RestaurantRepository {
     override val info = RestaurantInfo(
-        name = "Guria To Go",
+        name = "Guria TO GO",
         address = "Avenida Ingenieros del Mopu, 7",
         phone = "+34629029511",
         hours = DayOfWeek.entries

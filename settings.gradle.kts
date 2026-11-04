@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Guria GO"
+rootProject.name = "Guria TO GO"
 include(":app")
 include(":data")
 include(":domain")

@@ -222,7 +222,7 @@ private fun ContactRow(
 @Composable
 fun InfoScreenPreview() {
     val info = RestaurantInfo(
-        name = "Guria To Go",
+        name = "Guria TO GO",
         address = "Calle Ejemplo 1",
         phone = "+34000000000",
         hours = DayOfWeek.entries

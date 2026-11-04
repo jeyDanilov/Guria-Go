@@ -16,14 +16,14 @@ data class CartSummary(val count: Int = 0, val totalCents: Int = 0)
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
-    cart: CartRepository,
-    observeOpenStatus: ObserveOpenStatus
+    cart: CartRepository, observeOpenStatus: ObserveOpenStatus
 ) : ViewModel() {
 
-    val cartSummary: StateFlow<CartSummary> = cart.items
-        .map { items -> CartSummary(items.size, items.sumOf { it.lineTotalCents }) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CartSummary())
+    val cartSummary: StateFlow<CartSummary> =
+        cart.items.map { items -> CartSummary(items.size, items.sumOf { it.lineTotalCents }) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CartSummary())
 
-    val openStatus: StateFlow<OpenStatus?> = observeOpenStatus()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    val openStatus: StateFlow<OpenStatus> = observeOpenStatus().stateIn(
+            viewModelScope, SharingStarted.WhileSubscribed(5_000), observeOpenStatus.current()
+        )
 }

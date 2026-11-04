@@ -99,6 +99,8 @@ fun DishDetailScreen(
                                 dishId = dish.id,
                                 name = dish.name,
                                 quantity = quantity,
+                                prepMinMinutes = 20,
+                                prepMaxMinutes = 25,
                                 optionNames = selectedOptions.map { it.name },
                                 lineTotalCents = totalCents
                             )
@@ -230,7 +232,7 @@ fun DishInfo(
                 )
 
                 Text(
-                    text = "Listo en unos 25 minutos", style = MaterialTheme.typography.bodySmall
+                    text = "Listo en ${dish.prepMinMinutes} - ${dish.prepMaxMinutes} min", style = MaterialTheme.typography.bodySmall
                 )
             }
 

@@ -13,10 +13,13 @@ import java.time.ZoneId
 class ObserveOpenStatus @Inject constructor(
     private val repository: RestaurantRepository
 ) {
-    operator fun invoke(): Flow<OpenStatus> = flow{
-        while (true){
-            emit(repository.info.statusAt(LocalDateTime.now(ZoneId.of("Europe/Madrid"))))
-            delay(60000)
+    fun current(): OpenStatus =
+        repository.info.statusAt(LocalDateTime.now(ZoneId.of("Europe/Madrid")))
+
+    operator fun invoke(): Flow<OpenStatus> = flow {
+        while (true) {
+            emit(current())
+            delay(60_000)
         }
     }
 }

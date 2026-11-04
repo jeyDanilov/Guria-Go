@@ -33,6 +33,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -55,6 +56,8 @@ import com.model.OpenStatus
 import com.model.OptionGroup
 import com.model.Pricing
 import com.model.basePriceCents
+import com.theme.GuriaGoTheme
+import java.time.LocalTime
 
 
 data class Dish(
@@ -64,6 +67,8 @@ data class Dish(
     val pricing: Pricing,
     @DrawableRes val image: Int,
     val categories: List<String>,
+    val prepMinMinutes: Int = 15,
+    val prepMaxMinutes: Int = 20,
     val optionGroups: List<OptionGroup> = emptyList(),
 )
 
@@ -128,7 +133,7 @@ fun MenuScreen(
     onQueryChange: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onAddClick: (Dish) -> Unit,
-    openStatus: OpenStatus?,
+    openStatus: OpenStatus,
     onInfoClick: () -> Unit,
     cartCount: Int,
     cartTotalCents: Int,
@@ -136,14 +141,14 @@ fun MenuScreen(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        openStatus?.let {
+
             MenuHeader(
                 query = query,
                 onQueryChange = onQueryChange,
                 onInfoClick = onInfoClick,
-                openStatus = it
+                openStatus =openStatus
             )
-        }
+
 
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -188,7 +193,7 @@ fun MenuScreen(
 fun MenuHeader(
     query: String,
     onQueryChange: (String) -> Unit,
-    openStatus: OpenStatus?,
+    openStatus: OpenStatus,
     onInfoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -208,7 +213,7 @@ fun MenuHeader(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Guria To GO",
+                    text = "Guria TO GO",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -251,7 +256,6 @@ fun MenuHeader(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MenuScreenPreview() {
@@ -264,19 +268,22 @@ fun MenuScreenPreview() {
         FakeDishes.all.filter { it.name.contains(query, ignoreCase = true) }
     }
 
-    MaterialTheme {
-        MenuScreen(
-            categories = FakeDishes.category,
-            selectedCategory = selectedCategory,
-            dishes = dishes,
-            query = query,
-            onInfoClick = {},
-            cartCount = 2,
-            cartTotalCents = 3740,
-            onCartClick = {},
-            openStatus = OpenStatus.Closed(null, null),
-            onQueryChange = { query = it },
-            onCategorySelected = { selectedCategory = it },
-            onAddClick = {})
+    GuriaGoTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            MenuScreen(
+                categories = FakeDishes.category,
+                selectedCategory = selectedCategory,
+                dishes = dishes,
+                query = query,
+                onQueryChange = { query = it },
+                onCategorySelected = { selectedCategory = it },
+                onAddClick = {},
+                openStatus = OpenStatus.Open(LocalTime.of(22, 0)),
+                onInfoClick = {},
+                cartCount = 2,
+                cartTotalCents = 3740,
+                onCartClick = {}
+            )
+        }
     }
 }
