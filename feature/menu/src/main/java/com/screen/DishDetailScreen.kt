@@ -1,5 +1,6 @@
 package com.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -232,7 +234,8 @@ fun DishInfo(
                 )
 
                 Text(
-                    text = "Listo en ${dish.prepMinMinutes} - ${dish.prepMaxMinutes} min", style = MaterialTheme.typography.bodySmall
+                    text = "Listo en ${dish.prepMinMinutes} - ${dish.prepMaxMinutes} min",
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
@@ -273,6 +276,8 @@ fun DishDetailRoute(
         mutableStateOf(emptySet<String>())
     }
 
+    val context = LocalContext.current
+
     DishDetailScreen(
         dish = dish,
         quantity = quantity,
@@ -284,8 +289,12 @@ fun DishDetailRoute(
             selectedOptionsIds =
                 selectedOptionsIds.toggle(group, option)
         },
-        onAddToCart = { item -> viewModel.addToCart(item)
-        onAddedToCart()},
+        onAddToCart = { item ->
+            viewModel.addToCart(item)
+            Toast.makeText(context, "Añadido: ${item.quantity} * ${item.name}", Toast.LENGTH_SHORT)
+                .show()
+            onAddedToCart()
+        },
         onBackClick = onBack
     )
 }
@@ -298,16 +307,16 @@ fun DishDetailRoute(
 @Composable
 fun DishDetailPreview() {
     val dish = FakeDishes.byId(4)
-    var quantity by remember {mutableIntStateOf(dish.pricing.minQuantity)}
-    var selected by remember {mutableStateOf(emptySet<String>())}
+    var quantity by remember { mutableIntStateOf(dish.pricing.minQuantity) }
+    var selected by remember { mutableStateOf(emptySet<String>()) }
 
     MaterialTheme {
         DishDetailScreen(
             dish = dish,
             quantity = quantity,
             selectedOptionsIds = selected,
-            onOptionClick = { group, option -> selected = selected.toggle(group, option)},
-            onQuantityChange = {quantity = it},
+            onOptionClick = { group, option -> selected = selected.toggle(group, option) },
+            onQuantityChange = { quantity = it },
             onBackClick = {},
             onAddToCart = {}
         )

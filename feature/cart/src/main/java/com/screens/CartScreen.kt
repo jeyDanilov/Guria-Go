@@ -49,6 +49,7 @@ import com.model.CheckoutForm
 import com.model.OrderType
 import com.theme.GuriaGoTheme
 import com.uistate.CartUiState
+import androidx.compose.material3.OutlinedButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -105,11 +106,28 @@ fun CartScreen(
                 EmptyCart(onBack)
             } else {
                 SectionCard("Tus artículos") {
+
                     state.items.forEachIndexed { index, item ->
-                        CartItemRow(item = item, onRemove = { onRemove(item.id) })
-                        if (index < state.items.lastIndex) HorizontalDivider()
+                        CartItemRow(
+                            item = item,
+                            onRemove = { onRemove(item.id) }
+                        )
+
+                        if (index < state.items.lastIndex) {
+                            HorizontalDivider()
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedButton(
+                        onClick = onBack,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("+ Añadir más platos")
                     }
                 }
+
                 SectionCard("¿Cómo lo quieres?") {
                     OrderTypeSwitch(
                         selected = state.form.type,
@@ -117,10 +135,13 @@ fun CartScreen(
                             onFormChange(
                                 state.form.copy(
                                     type = type,
-                                    payment = if (type == OrderType.LLEVAR) null else state.form.payment))
+                                    payment = if (type == OrderType.LLEVAR) null else state.form.payment
+                                )
+                            )
                         }
                     )
                 }
+
                 SectionCard("Tus datos") {
                     GuriaTextField(
                         value = state.form.name,

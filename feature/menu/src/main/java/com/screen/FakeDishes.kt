@@ -89,6 +89,22 @@ object FakeDishes {
             image = R.drawable.ensaladageorgian,
             categories = listOf("Platos Fríos", "Ensaladas")
         ),
+        Dish(
+            id = 8,
+            name = "Medovik",
+            description = "Exquisito pastel de miel compuesto por múltiples capas suaves y una cremosa cobertura artesanal. Su sabor dulce, con delicadas notas de miel y caramelo, ofrece una experiencia reconfortante e inolvidable.",
+            pricing = Pricing.Fixed(250),
+            image = R.drawable.medovik,
+            categories = listOf("Postres")
+        ),
+        Dish(
+            id = 9,
+            name = "Georgian Kada",
+            description = "Auténtico postre georgiano preparado con masa fina y un relleno dulce de mantequilla tostada. Su combinación de textura crujiente y sabor tradicional lo convierte en una especialidad única de la repostería caucásica.",
+            pricing = Pricing.Fixed(250),
+            image = R.drawable.georgiansweet,
+            categories = listOf("Postres")
+        )
     )
 
     fun byId(id: Int): Dish = all.first { it.id == id }
