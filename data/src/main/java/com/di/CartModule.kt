@@ -1,7 +1,7 @@
 package com.di
 
 import com.repository.CartRepository
-import com.repository.InMemoryCartRepository
+import com.repository.DataStoreCartRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class CartModule {
     @Binds
-    abstract fun bindCartRepository(impl: InMemoryCartRepository): CartRepository
+    abstract fun bindCartRepository(impl: DataStoreCartRepository): CartRepository
 }

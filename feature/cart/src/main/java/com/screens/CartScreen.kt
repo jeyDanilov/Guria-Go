@@ -113,7 +113,12 @@ fun CartScreen(
                 SectionCard("¿Cómo lo quieres?") {
                     OrderTypeSwitch(
                         selected = state.form.type,
-                        onSelected = { onFormChange(state.form.copy(type = it)) }
+                        onSelected = { type ->
+                            onFormChange(
+                                state.form.copy(
+                                    type = type,
+                                    payment = if (type == OrderType.LLEVAR) null else state.form.payment))
+                        }
                     )
                 }
                 SectionCard("Tus datos") {

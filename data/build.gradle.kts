@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -46,6 +47,10 @@ dependencies {
     implementation(libs.hilt.android)
     debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.hilt.compiler)
+
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
