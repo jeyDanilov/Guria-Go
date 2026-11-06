@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -60,21 +61,27 @@ fun CartScreen(
     onSend: () -> Unit,
     onBack: () -> Unit
 ) {
+    val imeVisible = WindowInsets.isImeVisible
+    val isDelivery = state.form.type == OrderType.ENTREGA
+
     Scaffold(
         modifier = Modifier.imePadding(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = { CartTopBar(onBack) },
         bottomBar = {
-            if (state.items.isNotEmpty()) {
+            if (state.items.isNotEmpty() && !imeVisible) {
                 Surface(shadowElevation = 8.dp, color = MaterialTheme.colorScheme.background) {
-
-                    Column(
-                        modifier = Modifier
-                            .navigationBarsPadding()
-                            .imePadding()
-                    ) {
+                    Column(modifier = Modifier.navigationBarsPadding()) {
+                        if (!state.isOpen) {
+                            Text(
+                                "El local está cerrado ahora. Podrás enviar tu pedido cuando abramos.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)
+                            )
+                        }
                         Text(
-                            "Tu nombre, teléfono y dirección se envían a la barra para preparar tu pedido. ",
+                            "Tu nombre, teléfono y dirección se envían al local para preparar tu pedido.",
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
@@ -93,7 +100,6 @@ fun CartScreen(
                 }
             }
         }
-
     ) { padding ->
         Column(
             modifier = Modifier
@@ -105,25 +111,13 @@ fun CartScreen(
             if (state.items.isEmpty()) {
                 EmptyCart(onBack)
             } else {
-                SectionCard("Tus artículos") {
-
+                SectionCard("Tus platos") {
                     state.items.forEachIndexed { index, item ->
-                        CartItemRow(
-                            item = item,
-                            onRemove = { onRemove(item.id) }
-                        )
-
-                        if (index < state.items.lastIndex) {
-                            HorizontalDivider()
-                        }
+                        CartItemRow(item = item, onRemove = { onRemove(item.id) })
+                        if (index < state.items.lastIndex) HorizontalDivider()
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    OutlinedButton(
-                        onClick = onBack,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
                         Text("+ Añadir más platos")
                     }
                 }
@@ -156,33 +150,34 @@ fun CartScreen(
                         keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Phone)
                     )
                 }
-                if (state.form.type == OrderType.ENTREGA) {
+
+                if (isDelivery) {
                     SectionCard("Dirección de entrega") {
                         GuriaTextField(
                             value = state.form.address,
                             onValueChange = { onFormChange(state.form.copy(address = it)) },
                             label = "Calle y número"
                         )
+                        GuriaTextField(
+                            value = state.form.details,
+                            onValueChange = { onFormChange(state.form.copy(details = it)) },
+                            label = "Piso, puerta (opcional)"
+                        )
                     }
 
-                    GuriaTextField(
-                        value = state.form.details,
-                        onValueChange = { onFormChange(state.form.copy(details = it)) },
-                        label = "Suelo, puerta (opcional)"
-                    )
+                    SectionCard("Forma de pago") {
+                        PaymentSwitch(
+                            selected = state.form.payment,
+                            onSelect = { onFormChange(state.form.copy(payment = it)) }
+                        )
+                        Text(
+                            text = if (state.form.payment == null) "Elige cómo vas a pagar al recibir tu pedido."
+                            else "Pagas al repartidor cuando recibas tu pedido.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
 
-                SectionCard("Forma de pago") {
-                    PaymentSwitch(
-                        selected = state.form.payment,
-                        onSelect = { onFormChange(state.form.copy(payment = it)) }
-                    )
-                    Text(
-                        text = if (state.form.payment == null) "Elige cómo vas a pagar al recibir tu pedido."
-                        else "Pagas al repartidor cuando recibas tu pedido.",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
                 SectionCard("Nota para la cocina") {
                     GuriaTextField(
                         value = state.form.notes,
@@ -191,30 +186,34 @@ fun CartScreen(
                         singleLine = false
                     )
                 }
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    if (state.deliveryFeeCents > 0) {
-                        SummaryRow(
-                            "Envío",
-                            "%.2f €".format(state.deliveryFeeCents / 100.0)
+                    if (state.hasFreeDelivery) {
+                        SummaryRow("Envío", "Gratis")
+                    } else if (state.deliveryFeeCents > 0) {
+                        SummaryRow("Envío", "%.2f €".format(state.deliveryFeeCents / 100.0))
+                        Text(
+                            "Añade %.2f € más y el envío es gratis.".format(state.amountToFreeDeliveryCents / 100.0),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
-
                     SummaryRow(
                         "Tiempo estimado",
                         "${state.estimate.first}-${state.estimate.last} min"
                     )
-
                     SummaryRow(
                         "Total",
                         "%.2f €".format(state.totalCents / 100.0),
                         emphasized = true
                     )
                 }
+
                 Spacer(Modifier.height(8.dp))
             }
         }
