@@ -223,8 +223,8 @@ private fun ContactRow(
 fun InfoScreenPreview() {
     val info = RestaurantInfo(
         name = "Guria TO GO",
-        address = "Calle Ejemplo 1",
-        phone = "+34000000000",
+        address = "Santo Domingo de la Calzada",
+        phone = "+34629029511",
         hours = DayOfWeek.entries
             .filter { it != DayOfWeek.TUESDAY }
             .map { OpeningHours(it, LocalTime.of(9, 0), LocalTime.of(22, 0)) },

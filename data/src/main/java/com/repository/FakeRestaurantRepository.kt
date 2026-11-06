@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class FakeRestaurantRepository @Inject constructor(): RestaurantRepository {
     override val info = RestaurantInfo(
         name = "Guria TO GO",
-        address = "Avenida Ingenieros del Mopu, 7",
+        address = "Santo Domingo de la Calzada",
         phone = "+34629029511",
         hours = DayOfWeek.entries
             .filter { it != DayOfWeek.TUESDAY }
