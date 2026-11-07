@@ -95,7 +95,13 @@ fun DishCard(
                 .aspectRatio(3f / 3f)
         )
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(dish.name, style = MaterialTheme.typography.titleMedium)
+            Text(
+                dish.name, style = MaterialTheme.typography.titleMedium,
+                minLines = 2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
             Text(
                 dish.description,
                 style = MaterialTheme.typography.bodySmall,
@@ -142,12 +148,12 @@ fun MenuScreen(
 ) {
     Column(modifier = modifier) {
 
-            MenuHeader(
-                query = query,
-                onQueryChange = onQueryChange,
-                onInfoClick = onInfoClick,
-                openStatus =openStatus
-            )
+        MenuHeader(
+            query = query,
+            onQueryChange = onQueryChange,
+            onInfoClick = onInfoClick,
+            openStatus = openStatus
+        )
 
 
         LazyRow(
@@ -170,7 +176,10 @@ fun MenuScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(dishes, key = { it.id }) { dish ->
-                DishCard(dish = dish, onAddClick = { onAddClick(dish) }, onClick = {onAddClick(dish)})
+                DishCard(
+                    dish = dish,
+                    onAddClick = { onAddClick(dish) },
+                    onClick = { onAddClick(dish) })
             }
         }
         if (cartCount > 0) {
