@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "773913876144",
+    "project_id": "guriatogo",
+    "storage_bucket": "guriatogo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773913876144:android:47a6665b3dfbf3a9f40d75",
+        "android_client_info": {
+          "package_name": "com.example.guriago"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGMxV4fiPMmNXfZ0ttEA83IW5BuV5W-UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

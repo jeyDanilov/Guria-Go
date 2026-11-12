@@ -36,6 +36,11 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
 
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.coroutines.play.services)
+
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinx.serialization)
