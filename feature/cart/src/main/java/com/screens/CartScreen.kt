@@ -69,7 +69,7 @@ fun CartScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = { CartTopBar(onBack) },
         bottomBar = {
-            if (state.items.isNotEmpty() && !imeVisible) {
+            if (state.items.isNotEmpty()) {
                 Surface(shadowElevation = 8.dp, color = MaterialTheme.colorScheme.background) {
                     Column(modifier = Modifier.navigationBarsPadding()) {
                         if (!state.isOpen) {

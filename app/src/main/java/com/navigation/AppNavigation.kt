@@ -11,6 +11,7 @@ import com.screen.DishDetailRoute
 import com.screen.InfoRoute
 import com.screen.MenuRoute
 import com.screens.CartRoute
+import com.screens.OrderSentRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -27,39 +28,58 @@ data object InfoKey : NavKey
 
 @Serializable
 data object OrderSentKey : NavKey
-
 @Composable
 fun AppNavigation() {
     val backStack = rememberNavBackStack(MenuKey)
 
+    // never removes the last screen
+    val goBack: () -> Unit = {
+        if (backStack.size > 1) backStack.removeLastOrNull()
+    }
+    // does not open the same screen twice (double tap)
+    val navigateTo: (NavKey) -> Unit = { key ->
+        if (backStack.lastOrNull() != key) backStack.add(key)
+    }
+
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = goBack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-
         entryProvider = entryProvider {
             entry<MenuKey> {
                 MenuRoute(
-                    onDishClick = { dish -> backStack.add(DishDetailKey(dish.id)) },
-                    onCartClick = { backStack.add(CartKey) },
-                    onInfoClick = {backStack.add(InfoKey    )}
+                    onDishClick = { dish -> navigateTo(DishDetailKey(dish.id)) },
+                    onCartClick = { navigateTo(CartKey) },
+                    onInfoClick = { navigateTo(InfoKey) }
                 )
             }
             entry<DishDetailKey> { key ->
                 DishDetailRoute(
                     dishId = key.dishId,
-                    onBack = { backStack.removeLastOrNull() },
-                    onAddedToCart = { backStack.add(CartKey) }
+                    onBack = goBack,
+                    onAddedToCart = goBack
                 )
             }
             entry<CartKey> {
-                CartRoute(onBack = { backStack.removeLastOrNull() })
+                CartRoute(
+                    onBack = goBack,
+                    onOrderSent = { navigateTo(OrderSentKey) }
+                )
             }
             entry<InfoKey> {
-                InfoRoute(onBack = { backStack.removeLastOrNull() })
+                InfoRoute(onBack = goBack)
+            }
+            entry<OrderSentKey> {
+                OrderSentRoute(
+                    onDone = {
+                        // keep only the first screen (the menu)
+                        while (backStack.size > 1) backStack.removeLastOrNull()
+                    },
+                    onBackToOrder = goBack
+                )
             }
         }
     )

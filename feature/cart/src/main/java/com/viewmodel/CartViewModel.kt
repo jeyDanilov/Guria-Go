@@ -11,10 +11,12 @@ import com.uistate.CartUiState
 import com.usecase.ObserveOpenStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -36,18 +38,29 @@ class CartViewModel @Inject constructor(
         )
 
 
-
     fun onFormChange(newForm: CheckoutForm) {
         form.value = newForm
     }
 
     fun onRemove(id: String) = cart.remove(id)
 
+    sealed interface CartEvent {
+        data object OrderSent : CartEvent
+        data object SendFailed : CartEvent
+    }
+
+    private val _events = Channel<CartEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
+
     fun onSendOrder() {
         val state = uiState.value
-        if(!state.canSend) return
+        if (!state.canSend) return
         viewModelScope.launch {
             orders.placeOrder(Order(state.items, state.form))
+                .onSuccess { _events.send(CartEvent.OrderSent) }
+                .onFailure { _events.send(CartEvent.SendFailed) }
         }
     }
+
+
 }
