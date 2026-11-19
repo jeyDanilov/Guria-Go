@@ -1,5 +1,6 @@
 package com.di
 
+import com.repository.HybridOrderRepository
 import com.repository.OrderRepository
 import com.repository.WhatsAppOrderRepository
 import dagger.Binds
@@ -11,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class OrderModule {
     @Binds
-    abstract fun bindOrderRepository(impl: WhatsAppOrderRepository): OrderRepository
+    abstract fun bindOrderRepository(impl: HybridOrderRepository): OrderRepository
 }

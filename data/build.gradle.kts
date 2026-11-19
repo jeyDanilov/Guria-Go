@@ -57,6 +57,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.2.1")
     implementation(libs.kotlinx.serialization.json)
 
+    //Firebase Auth
+    implementation("com.google.firebase:firebase-auth")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
